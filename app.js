@@ -1,4 +1,5 @@
 CreateCanvas()
+
 let matriz2D = CreateMatriz2D(cols, rows)
 
 function setup(){
