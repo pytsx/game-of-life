@@ -1,16 +1,35 @@
-CreateCanvas()
-
 const infosContainer = document.querySelector("#infos")
 infos.forEach(info => CreateInfo(infosContainer, info.label, info.id))
+const delayBtns = BtnSetter(infosContainer, "delay: ", "delay")
+const resolutionBtns = BtnSetter(infosContainer, "resolution: ", "resolution")
+
+CreateCanvas()
 
 const initDelay = 30
 let delay = initDelay
+
+delayBtns.addbtn.addEventListener("click", ()=>{
+  delay+=10
+  UpdateInfo("delay_add", delay)
+})
+delayBtns.delbtn.addEventListener("click", ()=>{
+  delay-=delay <= 0 ? 0 : 10
+  UpdateInfo("delay_del", delay)
+})
+resolutionBtns.addbtn.addEventListener("click", ()=>{
+  resolution+=1
+  UpdateInfo("resolution_add", resolution)
+})
+
+resolutionBtns.delbtn.addEventListener("click", ()=>{
+  resolution -= resolution <= 1 ? 0 : 1
+  UpdateInfo("resolution_del", resolution)
+})
 
 let matriz2D = CreateMatriz2D(cols, rows)
 let startAt = new Date().getTime()
 let lastTime = startAt
 let frame = 0
-
 function setup(){
   let population = 0
   Observer((currentTime) => {
@@ -20,9 +39,9 @@ function setup(){
       population += state
       let neighbors = countNeighbor(matriz2D, x, y)
       // rules 
-      if(state == 0 && neighbors == 3){
+      if(state == 0 && (neighbors == 3 || neighbors > 5)){
         next[x][y] = 1
-      } else  if(state == 1 && (neighbors < 2 || neighbors > 3)){
+      } else if(state == 1 && (neighbors < 2 || neighbors > 3)){
         next[x][y] = 0
       } else {
         next[x][y] = state
@@ -76,14 +95,6 @@ function handleFrame(){
 
 function observeFPS(fps) {
 
-  if (fps < 6) {
-    delay = initDelay * 3
-    resolution = initResolution * 3
-  }  else {
-
-    delay = initDelay 
-    resolution = initResolution
-  }
 }
 
 function Observer(callback) {
