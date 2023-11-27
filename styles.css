@@ -2,7 +2,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  color: #19c60d !important;
+  color: #0066cc !important;
   font-size: .8rem;
   font-family: sans-serif;
   font-weight: 600;
@@ -20,12 +20,15 @@ body {
 }
 canvas {
   background-color: #2d2d2d32;
+  transform: scale(1.64);
+  position: relative;
+  z-index: -1;
 }
 
 .fps_container{
   margin: 0 auto;
-
 }
+
 .infos{
   position: absolute;
   top: 0;
@@ -36,6 +39,11 @@ canvas {
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   padding: 10px;
+  border-radius: 0 0 .8rem 0;
+  border: 3px solid #0066cc;
+  box-shadow: 2px 2px 0px #dadada64;
+  border-top: none;
+  border-left: none;
 }
 
 sup{
