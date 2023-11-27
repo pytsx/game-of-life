@@ -1,13 +1,13 @@
 CreateCanvas()
 
-let matriz2D = CreateMatriz2D(cols, rows)
+let matriz2D = PopulateMatriz(CreateMatriz2D(cols, rows))
 
 function setup(){
+  generation++
+  let population = 0
+  
   Observer((currentTime) => {
-    generation++
-    let population = 0
-    const next = CreateMatriz2D(cols, rows)
-
+    let next = CreateMatriz2D(cols, rows)
     OpenMatriz(matriz2D, (x, y, state) => {
       population += state
       let neighbors = countNeighbor(matriz2D, x, y)
@@ -22,11 +22,11 @@ function setup(){
       }
     })
     matriz2D = next
-
     lastTime = currentTime
-    UpdateInfo("population", population)
-    animate()
   })
+
+  UpdateInfo("population", population)
+  animate()
 }
 
 function animate(){
@@ -37,7 +37,8 @@ function animate(){
 }
 
 function Observer(callback) {
-  const {currentTime, fps} = FPS(lastTime)
+  let currentTime = new Date().getTime()
+  const fps = FPS(currentTime)
   updateStats(fps, currentTime);
   callback(currentTime);
 }
