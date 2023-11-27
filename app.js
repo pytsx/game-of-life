@@ -1,16 +1,16 @@
 CreateCanvas()
 
-let matriz2D = PopulateMatriz(CreateMatriz2D(cols, rows))
+let arr2D = PopulateArr(CreateArr2D(cols, rows))
 
 function setup(){
   generation++
   let population = 0
   
   Observer((currentTime) => {
-    let next = CreateMatriz2D(cols, rows)
-    OpenMatriz(matriz2D, (x, y, state) => {
+    let next = CreateArr2D(cols, rows)
+    OpenArr(arr2D, (x, y, state) => {
       population += state
-      let neighbors = countNeighbor(matriz2D, x, y)
+      let neighbors = countNeighbor(arr2D, x, y)
 
       // rules 
       if(state == 0 && (neighbors == 3)){
@@ -21,7 +21,7 @@ function setup(){
         next[x][y] = state
       }
     })
-    matriz2D = next
+    arr2D = next
     lastTime = currentTime
   })
 
@@ -30,7 +30,7 @@ function setup(){
 }
 
 function animate(){
-  DrawMatriz(matriz2D)
+  DrawArr(arr2D)
   setTimeout(()=> {
     requestAnimationFrame(setup)
   }, delay)
