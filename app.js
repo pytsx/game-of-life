@@ -1,14 +1,10 @@
 CreateCanvas()
 
-const infosEl = document.querySelector("#infos")
-CreateInfo(infosEl, "fps: ", "fps")
-CreateInfo(infosEl, `n<sup>0</sup> frame: `, "frames")
-CreateInfo(infosEl, `delay: `, "delay")
-CreateInfo(infosEl, `resolution: `, "resolution")
-CreateInfo(infosEl, `population: `, "population")
+const infosContainer = document.querySelector("#infos")
+infos.forEach(info => CreateInfo(infosContainer, info.label, info.id))
 
-let delay = 15
-
+const initDelay = 30
+let delay = initDelay
 
 let matriz2D = CreateMatriz2D(cols, rows)
 let startAt = new Date().getTime()
@@ -51,12 +47,13 @@ function animate(){
 }
 
 
-function updateStats(fps) {
+function updateStats(fps, currentTime) {
   handleFrame();
   handleFPS(fps);
   observeFPS(fps);
   UpdateInfo("delay", delay)
   UpdateInfo("resolution", resolution)
+  UpdateInfo("conter", Math.floor(Math.abs(startAt - currentTime) / 60))
 }
 
 function handleFPS(){
@@ -74,17 +71,18 @@ function handleFPS(fps) {
 
 function handleFrame(){
   frame++
-  UpdateInfo("frames", frame)
+  UpdateInfo("generation", frame)
 }
 
 function observeFPS(fps) {
 
-  if (fps < 10) {
-    delay = 50
-    resolution = 5
+  if (fps < 6) {
+    delay = initDelay * 3
+    resolution = initResolution * 3
   }  else {
-    delay = 15
-    resolution = 3
+
+    delay = initDelay 
+    resolution = initResolution
   }
 }
 
@@ -93,7 +91,7 @@ function Observer(callback) {
   const elapsedTime = currentTime - lastTime;
   const fps = 1000 / elapsedTime;
 
-  updateStats(fps);
+  updateStats(fps, currentTime);
   callback(currentTime);
 }
 
