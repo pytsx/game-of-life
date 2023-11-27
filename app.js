@@ -3,10 +3,10 @@ CreateCanvas()
 let arr2D = PopulateArr(CreateArr2D(cols, rows))
 
 function setup(){
-  generation++
-  let population = 0
-  
   Observer((currentTime) => {
+    generation++
+    let population = 0
+  
     let next = CreateArr2D(cols, rows)
     OpenArr(arr2D, (x, y, state) => {
       population += state
@@ -23,10 +23,11 @@ function setup(){
     })
     arr2D = next
     lastTime = currentTime
+    
+    UpdateInfo("population", population)
+    animate()
   })
 
-  UpdateInfo("population", population)
-  animate()
 }
 
 function animate(){
