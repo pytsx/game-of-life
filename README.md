@@ -1,2 +1,2 @@
-# life-cel-simalator
+# Game of Life
  
