@@ -1,45 +1,18 @@
-const infosContainer = document.querySelector("#infos")
-infos.forEach(info => CreateInfo(infosContainer, info.label, info.id))
-const delayBtns = BtnSetter(infosContainer, "delay: ", "delay")
-const resolutionBtns = BtnSetter(infosContainer, "resolution: ", "resolution")
-
 CreateCanvas()
-
-const initDelay = 30
-let delay = initDelay
-
-delayBtns.addbtn.addEventListener("click", ()=>{
-  delay+=10
-  UpdateInfo("delay_add", delay)
-})
-delayBtns.delbtn.addEventListener("click", ()=>{
-  delay-=delay <= 0 ? 0 : 10
-  UpdateInfo("delay_del", delay)
-})
-resolutionBtns.addbtn.addEventListener("click", ()=>{
-  resolution+=1
-  UpdateInfo("resolution_add", resolution)
-})
-
-resolutionBtns.delbtn.addEventListener("click", ()=>{
-  resolution -= resolution <= 1 ? 0 : 1
-  UpdateInfo("resolution_del", resolution)
-})
-
 let matriz2D = CreateMatriz2D(cols, rows)
-let startAt = new Date().getTime()
-let lastTime = startAt
-let frame = 0
+
 function setup(){
-  let population = 0
   Observer((currentTime) => {
+    generation++
+    let population = 0
     const next = CreateMatriz2D(cols, rows)
 
     OpenMatriz(matriz2D, (x, y, state) => {
       population += state
       let neighbors = countNeighbor(matriz2D, x, y)
+
       // rules 
-      if(state == 0 && (neighbors == 3 || neighbors > 5)){
+      if(state == 0 && (neighbors == 3)){
         next[x][y] = 1
       } else if(state == 1 && (neighbors < 2 || neighbors > 3)){
         next[x][y] = 0
@@ -50,58 +23,20 @@ function setup(){
     matriz2D = next
 
     lastTime = currentTime
+    UpdateInfo("population", population)
+    animate()
   })
-  UpdateInfo("population", population)
-  animate()
 }
 
-let running = true
 function animate(){
-  if(running){
-    DrawMatriz(matriz2D)
-    setTimeout(()=> {
-      requestAnimationFrame(setup)
-    }, delay)
-  }
-}
-
-
-function updateStats(fps, currentTime) {
-  handleFrame();
-  handleFPS(fps);
-  observeFPS(fps);
-  UpdateInfo("delay", delay)
-  UpdateInfo("resolution", resolution)
-  UpdateInfo("conter", Math.floor(Math.abs(startAt - currentTime) / 60))
-}
-
-function handleFPS(){
-  let currentTime = new Date().getTime()
-  let elapsedTime = currentTime - lastTime
-  const fps = 1000 / elapsedTime
-  UpdateInfo("fps", fps)
-
-  return {currentTime, fps}
-}
-
-function handleFPS(fps) {
-  UpdateInfo("fps", fps.toFixed(0))
-}
-
-function handleFrame(){
-  frame++
-  UpdateInfo("generation", frame)
-}
-
-function observeFPS(fps) {
-
+  DrawMatriz(matriz2D)
+  setTimeout(()=> {
+    requestAnimationFrame(setup)
+  }, delay)
 }
 
 function Observer(callback) {
-  const currentTime = new Date().getTime();
-  const elapsedTime = currentTime - lastTime;
-  const fps = 1000 / elapsedTime;
-
+  const {currentTime, fps} = FPS(lastTime)
   updateStats(fps, currentTime);
   callback(currentTime);
 }
